@@ -1,10 +1,10 @@
 try:
-    from typing import TYPE_CHECKING as __TYPE_CHECKING # type: ignore
+    from typing import TYPE_CHECKING as __TYPE_CHECKING
 except:
     __TYPE_CHECKING = False
 
 if __TYPE_CHECKING:
-    from typing import Any, Optional, Union, List, Tuple # type: ignore
+    from typing import Any, Optional, Union, List, Tuple
     
     class iovec:
         """Vector I/O data structure"""
@@ -1601,7 +1601,7 @@ if __TYPE_CHECKING:
         """
         ...
     
-    __all__ = [
+    _all = [
         # Core classes
         "io_uring",
         "io_uring_sqe", 
@@ -1825,4 +1825,5 @@ if __TYPE_CHECKING:
         "io_uring_for_each_cqe",
     ]
 else:
-    __all__ = []
+    _all = []
+__all__ = _all + ['_all']
