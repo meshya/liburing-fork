@@ -1299,11 +1299,157 @@ if __TYPE_CHECKING:
     def io_uring_unregister_files(ring: io_uring) -> int: ...
 
     # Socket operations
-    def io_uring_prep_connect(sqe: io_uring_sqe, fd: int, addr: sockaddr) -> None: ...
+    def io_uring_prep_socket(
+        sqe: io_uring_sqe,
+        domain: int,
+        type: int,
+        protocol: int = 0,
+        flags: int = 0
+    ) -> None: 
+        """Prepare a socket creation operation.
+        
+        Args:
+            sqe: Submission queue entry to prepare
+            domain: Protocol family (AF_INET, AF_INET6, AF_UNIX, etc.)
+            type: Socket type (SOCK_STREAM, SOCK_DGRAM, etc.)
+            protocol: Protocol number (default: 0)
+            flags: Socket flags (default: 0)
+        """
+        ...
     
-    def io_uring_prep_bind(sqe: io_uring_sqe, fd: int, addr: sockaddr) -> None: ...
+    def io_uring_prep_socket_direct(
+        sqe: io_uring_sqe,
+        domain: int,
+        type: int,
+        protocol: int = 0,
+        file_index: int = 4294967295,
+        flags: int = 0
+    ) -> None: 
+        """Prepare a direct socket creation operation.
+        
+        Args:
+            sqe: Submission queue entry to prepare
+            domain: Protocol family (AF_INET, AF_INET6, AF_UNIX, etc.)
+            type: Socket type (SOCK_STREAM, SOCK_DGRAM, etc.)
+            protocol: Protocol number (default: 0)
+            file_index: Fixed file table index (default: auto-allocate)
+            flags: Socket flags (default: 0)
+        """
+        ...
     
-    def io_uring_prep_listen(sqe: io_uring_sqe, fd: int, backlog: int) -> None: ...
+    def io_uring_prep_socket_direct_alloc(
+        sqe: io_uring_sqe,
+        domain: int,
+        type: int,
+        protocol: int = 0,
+        flags: int = 0
+    ) -> None: 
+        """Prepare a direct socket creation with auto-allocation.
+        
+        Args:
+            sqe: Submission queue entry to prepare
+            domain: Protocol family (AF_INET, AF_INET6, AF_UNIX, etc.)
+            type: Socket type (SOCK_STREAM, SOCK_DGRAM, etc.)
+            protocol: Protocol number (default: 0)
+            flags: Socket flags (default: 0)
+        """
+        ...
+    
+    def io_uring_prep_accept(
+        sqe: io_uring_sqe,
+        fd: int,
+        addr: Optional[sockaddr] = None,
+        flags: int = 0
+    ) -> None: 
+        """Prepare an accept operation.
+        
+        Args:
+            sqe: Submission queue entry to prepare
+            fd: Listening socket file descriptor
+            addr: Optional socket address to store client address
+            flags: Accept flags (default: 0)
+        """
+        ...
+    
+    def io_uring_prep_accept_direct(
+        sqe: io_uring_sqe,
+        fd: int,
+        addr: Optional[sockaddr] = None,
+        flags: int = 0,
+        file_index: int = 4294967295
+    ) -> None: 
+        """Prepare a direct accept operation.
+        
+        Args:
+            sqe: Submission queue entry to prepare
+            fd: Listening socket file descriptor
+            addr: Optional socket address to store client address
+            flags: Accept flags (default: 0)
+            file_index: Fixed file table index (default: auto-allocate)
+        """
+        ...
+    
+    def io_uring_prep_multishot_accept(
+        sqe: io_uring_sqe,
+        fd: int,
+        addr: Optional[sockaddr] = None,
+        flags: int = 0
+    ) -> None: 
+        """Prepare a multishot accept operation.
+        
+        Args:
+            sqe: Submission queue entry to prepare
+            fd: Listening socket file descriptor
+            addr: Optional socket address to store client address
+            flags: Accept flags (default: 0)
+        """
+        ...
+    
+    def io_uring_prep_multishot_accept_direct(
+        sqe: io_uring_sqe,
+        fd: int,
+        addr: Optional[sockaddr] = None,
+        flags: int = 0
+    ) -> None: 
+        """Prepare a multishot direct accept operation.
+        
+        Args:
+            sqe: Submission queue entry to prepare
+            fd: Listening socket file descriptor
+            addr: Optional socket address to store client address
+            flags: Accept flags (default: 0)
+        """
+        ...
+    
+    def io_uring_prep_connect(sqe: io_uring_sqe, fd: int, addr: sockaddr) -> None: 
+        """Prepare a connect operation.
+        
+        Args:
+            sqe: Submission queue entry to prepare
+            fd: Socket file descriptor
+            addr: Socket address to connect to
+        """
+        ...
+    
+    def io_uring_prep_bind(sqe: io_uring_sqe, fd: int, addr: sockaddr) -> None: 
+        """Prepare a bind operation.
+        
+        Args:
+            sqe: Submission queue entry to prepare
+            fd: Socket file descriptor
+            addr: Socket address to bind to
+        """
+        ...
+    
+    def io_uring_prep_listen(sqe: io_uring_sqe, fd: int, backlog: int) -> None: 
+        """Prepare a listen operation.
+        
+        Args:
+            sqe: Submission queue entry to prepare
+            fd: Socket file descriptor
+            backlog: Maximum length of pending connections queue
+        """
+        ...
     
     def io_uring_prep_send(
         sqe: io_uring_sqe,
@@ -1311,7 +1457,120 @@ if __TYPE_CHECKING:
         buf: memoryview,
         length: int,
         flags: int = 0
-    ) -> None: ...
+    ) -> None: 
+        """Prepare a send operation.
+        
+        Args:
+            sqe: Submission queue entry to prepare
+            sockfd: Socket file descriptor
+            buf: Buffer containing data to send
+            length: Number of bytes to send
+            flags: Send flags (default: 0)
+        """
+        ...
+    
+    def io_uring_prep_send_set_addr(sqe: io_uring_sqe, dest_addr: sockaddr) -> None: 
+        """Set destination address for send operation.
+        
+        Args:
+            sqe: Submission queue entry to modify
+            dest_addr: Destination socket address
+        """
+        ...
+    
+    def io_uring_prep_sendto(
+        sqe: io_uring_sqe,
+        sockfd: int,
+        buf: memoryview,
+        length: int,
+        addr: sockaddr,
+        flags: int = 0
+    ) -> None: 
+        """Prepare a sendto operation.
+        
+        Args:
+            sqe: Submission queue entry to prepare
+            sockfd: Socket file descriptor
+            buf: Buffer containing data to send
+            length: Number of bytes to send
+            addr: Destination socket address
+            flags: Send flags (default: 0)
+        """
+        ...
+    
+    def io_uring_prep_send_zc(
+        sqe: io_uring_sqe,
+        sockfd: int,
+        buf: memoryview,
+        length: int,
+        flags: int = 0,
+        zc_flags: int = 0
+    ) -> None: 
+        """Prepare a zero-copy send operation.
+        
+        Args:
+            sqe: Submission queue entry to prepare
+            sockfd: Socket file descriptor
+            buf: Buffer containing data to send
+            length: Number of bytes to send
+            flags: Send flags (default: 0)
+            zc_flags: Zero-copy specific flags (default: 0)
+        """
+        ...
+    
+    def io_uring_prep_send_zc_fixed(
+        sqe: io_uring_sqe,
+        sockfd: int,
+        buf: memoryview,
+        length: int,
+        buf_index: int,
+        flags: int = 0,
+        zc_flags: int = 0
+    ) -> None: 
+        """Prepare a zero-copy send operation with fixed buffers.
+        
+        Args:
+            sqe: Submission queue entry to prepare
+            sockfd: Socket file descriptor
+            buf: Buffer containing data to send
+            length: Number of bytes to send
+            buf_index: Index of registered buffer
+            flags: Send flags (default: 0)
+            zc_flags: Zero-copy specific flags (default: 0)
+        """
+        ...
+    
+    def io_uring_prep_sendmsg(
+        sqe: io_uring_sqe,
+        fd: int,
+        msg: Optional[msghdr] = None,
+        flags: int = 0
+    ) -> None: 
+        """Prepare a sendmsg operation.
+        
+        Args:
+            sqe: Submission queue entry to prepare
+            fd: Socket file descriptor
+            msg: Message header with data and addresses
+            flags: Send flags (default: 0)
+        """
+        ...
+    
+    def io_uring_prep_sendmsg_zc(
+        sqe: io_uring_sqe,
+        fd: int,
+        msg: msghdr,
+        flags: int = 0
+    ) -> None: 
+        """Prepare a zero-copy sendmsg operation.
+        
+        Args:
+            sqe: Submission queue entry to prepare
+            fd: Socket file descriptor
+            msg: Message header with data and addresses
+            flags: Send flags (default: 0)
+        """
+        ...
     
     def io_uring_prep_recv(
         sqe: io_uring_sqe,
@@ -1319,9 +1578,201 @@ if __TYPE_CHECKING:
         buf: memoryview,
         length: int,
         flags: int = 0
-    ) -> None: ...
+    ) -> None: 
+        """Prepare a recv operation.
+        
+        Args:
+            sqe: Submission queue entry to prepare
+            sockfd: Socket file descriptor
+            buf: Buffer to receive data into
+            length: Maximum number of bytes to receive
+            flags: Receive flags (default: 0)
+        """
+        ...
     
-    def io_uring_prep_shutdown(sqe: io_uring_sqe, fd: int, how: int) -> None: ...
+    def io_uring_prep_recv_multishot(
+        sqe: io_uring_sqe,
+        sockfd: int,
+        buf: memoryview,
+        length: int,
+        flags: int = 0
+    ) -> None: 
+        """Prepare a multishot recv operation.
+        
+        Args:
+            sqe: Submission queue entry to prepare
+            sockfd: Socket file descriptor
+            buf: Buffer to receive data into
+            length: Maximum number of bytes to receive
+            flags: Receive flags (default: 0)
+        """
+        ...
+    
+    def io_uring_prep_recvmsg(
+        sqe: io_uring_sqe,
+        fd: int,
+        msg: Optional[msghdr] = None,
+        flags: int = 0
+    ) -> None: 
+        """Prepare a recvmsg operation.
+        
+        Args:
+            sqe: Submission queue entry to prepare
+            fd: Socket file descriptor
+            msg: Message header to receive data and addresses
+            flags: Receive flags (default: 0)
+        """
+        ...
+    
+    def io_uring_prep_recvmsg_multishot(
+        sqe: io_uring_sqe,
+        fd: int,
+        msg: Optional[msghdr] = None,
+        flags: int = 0
+    ) -> None: 
+        """Prepare a multishot recvmsg operation.
+        
+        Args:
+            sqe: Submission queue entry to prepare
+            fd: Socket file descriptor
+            msg: Message header to receive data and addresses
+            flags: Receive flags (default: 0)
+        """
+        ...
+    
+    def io_uring_prep_shutdown(sqe: io_uring_sqe, fd: int, how: int) -> None: 
+        """Prepare a shutdown operation.
+        
+        Args:
+            sqe: Submission queue entry to prepare
+            fd: Socket file descriptor
+            how: How to shutdown (SHUT_RD, SHUT_WR, SHUT_RDWR)
+        """
+        ...
+    
+    # Socket validation and utility functions
+    def io_uring_recvmsg_validate(
+        buf: memoryview,
+        buf_len: int,
+        msgh: msghdr
+    ) -> io_uring_recvmsg_out: 
+        """Validate recvmsg buffer and return output structure.
+        
+        Args:
+            buf: Buffer for received data
+            buf_len: Length of buffer
+            msgh: Message header structure
+            
+        Returns:
+            Recvmsg output structure for validation
+        """
+        ...
+    
+    def io_uring_recvmsg_cmsg_firsthdr(
+        o: io_uring_recvmsg_out,
+        msgh: msghdr
+    ) -> cmsghdr: 
+        """Get first control message header.
+        
+        Args:
+            o: Recvmsg output structure
+            msgh: Message header
+            
+        Returns:
+            First control message header
+        """
+        ...
+    
+    def io_uring_recvmsg_cmsg_nexthdr(
+        o: io_uring_recvmsg_out,
+        msgh: msghdr,
+        cmsg: cmsghdr
+    ) -> cmsghdr: 
+        """Get next control message header.
+        
+        Args:
+            o: Recvmsg output structure
+            msgh: Message header
+            cmsg: Current control message header
+            
+        Returns:
+            Next control message header
+        """
+        ...
+    
+    def io_uring_recvmsg_payload_length(
+        o: io_uring_recvmsg_out,
+        buf_len: int,
+        msgh: msghdr
+    ) -> int: 
+        """Get payload length from recvmsg output.
+        
+        Args:
+            o: Recvmsg output structure
+            buf_len: Total buffer length
+            msgh: Message header
+            
+        Returns:
+            Length of received payload
+        """
+        ...
+    
+    # Socket command operations
+    def io_uring_prep_cmd_sock(
+        sqe: io_uring_sqe,
+        cmd_op: int,
+        sockfd: int,
+        level: int,
+        optname: int,
+        optval: Any
+    ) -> None: 
+        """Prepare a socket command operation.
+        
+        Args:
+            sqe: Submission queue entry to prepare
+            cmd_op: Socket command operation type
+            sockfd: Socket file descriptor
+            level: Protocol level for the option
+            optname: Option name
+            optval: Option value (array with typecode 'i' or 'B')
+        """
+        ...
+    
+    def io_uring_prep_setsockopt(
+        sqe: io_uring_sqe,
+        sockfd: int,
+        level: int,
+        optname: int,
+        optval: Any
+    ) -> None: 
+        """Prepare a setsockopt operation.
+        
+        Args:
+            sqe: Submission queue entry to prepare
+            sockfd: Socket file descriptor
+            level: Protocol level for the option
+            optname: Option name
+            optval: Option value (array with typecode 'i' or 'B')
+        """
+        ...
+    
+    def io_uring_prep_getsockopt(
+        sqe: io_uring_sqe,
+        sockfd: int,
+        level: int,
+        optname: int,
+        optval: Any
+    ) -> None: 
+        """Prepare a getsockopt operation.
+        
+        Args:
+            sqe: Submission queue entry to prepare
+            sockfd: Socket file descriptor
+            level: Protocol level for the option
+            optname: Option name
+            optval: Option value buffer (array with typecode 'i' or 'B')
+        """
+        ...
 
     # Statx operations
     def io_uring_prep_statx(
@@ -1769,12 +2220,39 @@ if __TYPE_CHECKING:
         "io_uring_unregister_files",
         
         # Socket operations
+        "io_uring_prep_socket",
+        "io_uring_prep_socket_direct",
+        "io_uring_prep_socket_direct_alloc",
+        "io_uring_prep_accept",
+        "io_uring_prep_accept_direct",
+        "io_uring_prep_multishot_accept",
+        "io_uring_prep_multishot_accept_direct",
         "io_uring_prep_connect",
         "io_uring_prep_bind",
         "io_uring_prep_listen",
         "io_uring_prep_send",
+        "io_uring_prep_send_set_addr",
+        "io_uring_prep_sendto",
+        "io_uring_prep_send_zc",
+        "io_uring_prep_send_zc_fixed",
+        "io_uring_prep_sendmsg",
+        "io_uring_prep_sendmsg_zc",
         "io_uring_prep_recv",
+        "io_uring_prep_recv_multishot",
+        "io_uring_prep_recvmsg",
+        "io_uring_prep_recvmsg_multishot",
         "io_uring_prep_shutdown",
+        
+        # Socket validation and utility functions
+        "io_uring_recvmsg_validate",
+        "io_uring_recvmsg_cmsg_firsthdr",
+        "io_uring_recvmsg_cmsg_nexthdr",
+        "io_uring_recvmsg_payload_length",
+        
+        # Socket command operations
+        "io_uring_prep_cmd_sock",
+        "io_uring_prep_setsockopt",
+        "io_uring_prep_getsockopt",
         
         # Statx operations
         "io_uring_prep_statx",
