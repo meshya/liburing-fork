@@ -12,7 +12,4 @@ importer(exclude_dir=['lib', 'include'])
 # - This helps managing the project much easy and moving files/function around
 # doesn't break the project.
 
-
-# Typing
 from ._typing import *
-

@@ -1600,8 +1600,7 @@ if __TYPE_CHECKING:
             Number of entries processed
         """
         ...
-    
-    _all = [
+    __all__ = [
         # Core classes
         "io_uring",
         "io_uring_sqe", 
@@ -1824,6 +1823,4 @@ if __TYPE_CHECKING:
         # Iteration functions
         "io_uring_for_each_cqe",
     ]
-else:
-    _all = []
-__all__ = _all + ['_all']
+
